@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CacheManagerService } from './cacheManager.service';
-import { User } from 'src/Model/user.model';
+import { User } from '../Model/user.model';
 import { Profile } from '../Model/profileUser.model';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateUserRequest } from '../Model/dto/Request/user/createUserRequest';
@@ -8,7 +8,7 @@ import { UpdateUserRequest } from '../Model/dto/Request/user/updateUserRequest';
 import { SucessfulResponse } from '../Model/dto/Response/sucessfulResponse'; 
 import { GetUserResponse } from '../Model/dto/Response/user/getUserResponse';
 import HttpCustomException from '../Exception/HttpCustomException';
-import { StatusCodeEnums } from 'src/Enum/StatusCodeEnum';
+import { StatusCodeEnums } from '../Enum/StatusCodeEnum';
 
 @Injectable()
 export class UsersService {
@@ -161,7 +161,7 @@ async deleteUserById(id: string): Promise<SucessfulResponse> {
      * @param profileCode - Código del perfil a buscar.
      * @returns Perfil encontrado.
      */
-    private _profileValidation(profiles: any[], profileCode: string): any {
+    public _profileValidation(profiles: any[], profileCode: string): any {
         console.log(profiles)
         const profile: Profile = profiles.find(profile => profile.code === profileCode);
         if (!profile) {
@@ -175,7 +175,7 @@ async deleteUserById(id: string): Promise<SucessfulResponse> {
      * @param users - Lista de usuarios.
      * @param email - Correo electrónico a verificar.
      */
-    private _uniqueEmailValidation(users: User[], email: string): void {
+    public _uniqueEmailValidation(users: User[], email: string): void {
         const existingUser: User = users.find(user => user.email === email);
         if (existingUser) {
             throw new HttpCustomException(`El email ${email} ya se encuentra registrado.`, StatusCodeEnums.EMAIL_DUPLICATED);
@@ -188,7 +188,7 @@ async deleteUserById(id: string): Promise<SucessfulResponse> {
      * @param id - ID del usuario a buscar.
      * @returns Usuario encontrado.
      */
-    private _userValidation(users: User[], id: string): User {
+    public _userValidation(users: User[], id: string): User {
         const user: User = users.find(user => user.id === id);
         if (!user) {
             throw new HttpCustomException(`Usuario con ID ${id} no encontrado`, StatusCodeEnums.USER_NOT_FOUND);
