@@ -68,10 +68,10 @@ describe('UsersController', () => {
 
   describe('createUser', () => {
     it('should create a user and return a success message', async () => {
-      const newUser: CreateUserRequest = mockNewUser
+      const newUser: CreateUserRequest = mockNewUser;
 
       const result = new SucessfulResponse('User created successfully');
-      
+
       jest.spyOn(service, 'createUser').mockResolvedValue(result);
 
       const response = await controller.createUser(newUser);
@@ -82,12 +82,14 @@ describe('UsersController', () => {
 
   describe('findAllUsers', () => {
     it('should return a list of users', async () => {
-      const usersResponse: GetUserResponse[] = [ mockExistingUser ]
-      
+      const usersResponse: GetUserResponse[] = [mockExistingUser];
+
       jest.spyOn(service, 'findAllUsers').mockResolvedValue(usersResponse);
 
       const response = await controller.findAllUsers();
-      expect(response).toEqual(Response.create<GetUserResponse[]>(usersResponse));
+      expect(response).toEqual(
+        Response.create<GetUserResponse[]>(usersResponse),
+      );
       expect(service.findAllUsers).toHaveBeenCalled();
     });
   });
@@ -95,8 +97,8 @@ describe('UsersController', () => {
   describe('findUserById', () => {
     it('should return a user by ID', async () => {
       const userId = '123';
-      const userResponse: GetUserResponse = mockExistingUser
-      
+      const userResponse: GetUserResponse = mockExistingUser;
+
       jest.spyOn(service, 'findUserById').mockResolvedValue(userResponse);
 
       const response = await controller.findUserById(userId);
@@ -107,10 +109,10 @@ describe('UsersController', () => {
 
   describe('updateUserById', () => {
     it('should update a user and return a success message', async () => {
-      const updateUser: UpdateUserRequest =  mockUpdateUser
+      const updateUser: UpdateUserRequest = mockUpdateUser;
 
       const result = new SucessfulResponse('User updated successfully');
-      
+
       jest.spyOn(service, 'updateUserById').mockResolvedValue(result);
 
       const response = await controller.updateUserById(updateUser);
@@ -123,7 +125,7 @@ describe('UsersController', () => {
     it('should delete a user by ID and return a success message', async () => {
       const userId = '123';
       const result = new SucessfulResponse('User deleted successfully');
-      
+
       jest.spyOn(service, 'deleteUserById').mockResolvedValue(result);
 
       const response = await controller.deleteUserById(userId);

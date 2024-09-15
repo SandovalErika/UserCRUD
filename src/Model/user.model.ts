@@ -8,7 +8,10 @@ export class User {
   @ApiProperty({ example: 'Erika Sandoval', description: 'Nombre del usuario' })
   name: string;
 
-  @ApiProperty({ example: 'erikabsandoval@gmail.com', description: 'Correo electrónico del usuario' })
+  @ApiProperty({
+    example: 'erikabsandoval@gmail.com',
+    description: 'Correo electrónico del usuario',
+  })
   email: string;
 
   @ApiProperty({ example: 32, description: 'Edad del usuario' })

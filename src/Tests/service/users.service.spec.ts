@@ -67,56 +67,67 @@ describe('UsersService', () => {
 
   describe('createUser', () => {
     it('should create a user and return success response', async () => {
-      const newUser: CreateUserRequest = mockNewUser
-      const profiles: Profile[] = mockProfiles
-     
+      const newUser: CreateUserRequest = mockNewUser;
+      const profiles: Profile[] = mockProfiles;
+
       const result = new SucessfulResponse('User created successfully');
 
       jest.spyOn(cacheService, 'get').mockResolvedValue(profiles);
       jest.spyOn(cacheService, 'set').mockResolvedValue();
-      jest.spyOn(service, '_profileValidation').mockReturnValue(
-        {
-          id: 1,
-          code: 'ADMIN',
-          name: 'Admin'
-        }
-      );
-      jest.spyOn(service, '_uniqueEmailValidation').mockImplementation(() => {});
+      jest.spyOn(service, '_profileValidation').mockReturnValue({
+        id: 1,
+        code: 'ADMIN',
+        name: 'Admin',
+      });
+      jest
+        .spyOn(service, '_uniqueEmailValidation')
+        .mockImplementation(() => {});
 
       const response = await service.createUser(newUser);
       expect(response).toEqual(result);
       expect(cacheService.get).toHaveBeenCalledWith('defaultProfiles');
-      expect(cacheService.set).toHaveBeenCalledWith('allUsers', expect.any(Array), 360000);
+      expect(cacheService.set).toHaveBeenCalledWith(
+        'allUsers',
+        expect.any(Array),
+        360000,
+      );
     });
 
     it('should throw an error if profiles cannot be loaded', async () => {
-      const newUser: CreateUserRequest = mockNewUser
-     
+      const newUser: CreateUserRequest = mockNewUser;
+
       jest.spyOn(cacheService, 'get').mockResolvedValue([]);
       jest.spyOn(cacheService, 'loadDefaultProfiles').mockResolvedValue();
       jest.spyOn(cacheService, 'get').mockResolvedValue([]);
 
-      await expect(service.createUser(newUser)).rejects.toThrow('Profiles could not be loaded into the cache.');
+      await expect(service.createUser(newUser)).rejects.toThrow(
+        'Profiles could not be loaded into the cache.',
+      );
     });
 
     it('should throw an error if email is not unique', async () => {
-      const newUser: CreateUserRequest = mockNewUser
-      const profiles: Profile[] = mockProfiles
-     
+      const newUser: CreateUserRequest = mockNewUser;
+      const profiles: Profile[] = mockProfiles;
+
       jest.spyOn(cacheService, 'get').mockResolvedValue(profiles);
       jest.spyOn(cacheService, 'set').mockResolvedValue();
       jest.spyOn(service, '_uniqueEmailValidation').mockImplementation(() => {
-        throw new HttpCustomException('Email already registered', StatusCodeEnums.EMAIL_DUPLICATED);
+        throw new HttpCustomException(
+          'Email already registered',
+          StatusCodeEnums.EMAIL_DUPLICATED,
+        );
       });
 
-      await expect(service.createUser(newUser)).rejects.toThrow(HttpCustomException);
+      await expect(service.createUser(newUser)).rejects.toThrow(
+        HttpCustomException,
+      );
     });
   });
 
   describe('findAllUsers', () => {
     it('should return a list of users', async () => {
-      const users: User[] = [ mockExistingUser ];
-      const expectedResponse = users.map(user => new GetUserResponse(user));
+      const users: User[] = [mockExistingUser];
+      const expectedResponse = users.map((user) => new GetUserResponse(user));
 
       jest.spyOn(cacheService, 'get').mockResolvedValue(users);
 
@@ -150,19 +161,21 @@ describe('UsersService', () => {
       const userId = '123';
       jest.spyOn(cacheService, 'get').mockResolvedValue([]);
 
-      await expect(service.findUserById(userId)).rejects.toThrow(HttpCustomException);
+      await expect(service.findUserById(userId)).rejects.toThrow(
+        HttpCustomException,
+      );
     });
   });
 
   describe('updateUserById', () => {
     it('should update a user and return success response', async () => {
       const updateUser: UpdateUserRequest = mockUpdateUser;
-      const existingUser: User = mockExistingUser
-      const updatedUser: User = mockExistingUser
-  
+      const existingUser: User = mockExistingUser;
+      const updatedUser: User = mockExistingUser;
+
       const result = new SucessfulResponse('User updated successfully');
 
-      const profiles = mockProfiles
+      const profiles = mockProfiles;
 
       jest.spyOn(cacheService, 'get').mockImplementation((key) => {
         if (key === 'allUsers') {
@@ -173,31 +186,37 @@ describe('UsersService', () => {
           return Promise.resolve([]);
         }
       });
-  
+
       jest.spyOn(cacheService, 'set').mockResolvedValue();
-  
+
       const cacheProfiles = await cacheService.get('profiles');
-  
+
       const response = await service.updateUserById(updateUser);
       expect(response).toEqual(result);
       expect(cacheService.get).toHaveBeenCalledWith('allUsers');
       expect(cacheService.get).toHaveBeenCalledWith('profiles');
-      expect(cacheService.set).toHaveBeenCalledWith('allUsers', expect.any(Array), 360000);
+      expect(cacheService.set).toHaveBeenCalledWith(
+        'allUsers',
+        expect.any(Array),
+        360000,
+      );
     });
 
     it('should throw an error if user to update is not found', async () => {
-      const updateUser: UpdateUserRequest = mockUpdateUser
+      const updateUser: UpdateUserRequest = mockUpdateUser;
 
       jest.spyOn(cacheService, 'get').mockResolvedValue([]);
 
-      await expect(service.updateUserById(updateUser)).rejects.toThrow(HttpCustomException);
+      await expect(service.updateUserById(updateUser)).rejects.toThrow(
+        HttpCustomException,
+      );
     });
   });
 
   describe('deleteUserById', () => {
     it('should delete a user by ID and return success response', async () => {
       const userId = '94adcc2d-9447-4285-8812-edaa9ef8bc98';
-      const existingUser: User = mockExistingUser
+      const existingUser: User = mockExistingUser;
 
       const result = new SucessfulResponse('User deleted successfully');
 
@@ -207,14 +226,20 @@ describe('UsersService', () => {
       const response = await service.deleteUserById(userId);
       expect(response).toEqual(result);
       expect(cacheService.get).toHaveBeenCalledWith('allUsers');
-      expect(cacheService.set).toHaveBeenCalledWith('allUsers', expect.any(Array), 360000);
+      expect(cacheService.set).toHaveBeenCalledWith(
+        'allUsers',
+        expect.any(Array),
+        360000,
+      );
     });
 
     it('should throw an error if user to delete is not found', async () => {
       const userId = '123';
       jest.spyOn(cacheService, 'get').mockResolvedValue([]);
 
-      await expect(service.deleteUserById(userId)).rejects.toThrow(HttpCustomException);
+      await expect(service.deleteUserById(userId)).rejects.toThrow(
+        HttpCustomException,
+      );
     });
   });
 });

@@ -5,14 +5,13 @@ import { UsersService } from './Service/users.service';
 import { CacheManagerService } from './Service/cacheManager.service';
 
 @Module({
-
   imports: [
     CacheModule.register({
       ttl: 360000,
       max: 100,
     }),
   ],
-  controllers: [ UsersController],
-  providers: [ UsersService, CacheManagerService],
+  controllers: [UsersController],
+  providers: [UsersService, CacheManagerService],
 })
 export class AppModule {}

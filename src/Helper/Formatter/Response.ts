@@ -1,11 +1,11 @@
 export default class Response<T> {
-    result: T
+  result: T;
 
-    constructor(response: T) {
-        this.result = response;
-    }
+  constructor(response: T) {
+    this.result = response;
+  }
 
-    public static create<T>(response: T): Response<T> {
-        return new Response<T>(response);
-    }
+  public static create<T>(response: T): Response<T> {
+    return new Response<T>(response);
+  }
 }
