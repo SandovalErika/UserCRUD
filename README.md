@@ -27,18 +27,20 @@
 [Nest](https://github.com/nestjs/nest) 
 App backend de CRUD de usuarios.
 
-## Clonacion del proyecto y ejecucion desde Docker 
+# Clonacion del proyecto y ejecucion desde Docker 
 
 Para ejecutar la aplicación es necesario tener instalado Docker y ejecutar los siguientes comandos (ubicados sobre el directorio del proyecto):
 
+```bash
 # Para construir la imagen:
-sudo docker build -t usercrud
+sudo docker build -t usercrud .
 
 # Para construir y correr el contenedor:
-sudo docker docker-compose-up
+sudo docker-compose-up
 
 # Luego se puede ver los endpoints documentados en swagger desde el navegador en:
 localhost:8081/api/docs#
+```
 
 ## Project setup
 
@@ -46,7 +48,7 @@ localhost:8081/api/docs#
 $ npm install
 ```
 
-## Compile and run the project
+### Compilacion y ejecucion del proyecto desde entorno local 
 
 ```bash
 # development
