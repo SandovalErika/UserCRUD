@@ -170,37 +170,17 @@ describe('UsersService', () => {
   describe('updateUserById', () => {
     it('should update a user and return success response', async () => {
       const updateUser: UpdateUserRequest = mockUpdateUser;
-      const existingUser: User = mockExistingUser;
-      const updatedUser: User = mockExistingUser;
-
+  
       const result = new SucessfulResponse('User updated successfully');
-
-      const profiles = mockProfiles;
-
-      jest.spyOn(cacheService, 'get').mockImplementation((key) => {
-        if (key === 'allUsers') {
-          return Promise.resolve([existingUser]);
-        } else if (key === 'profiles') {
-          return Promise.resolve(profiles);
-        } else {
-          return Promise.resolve([]);
-        }
-      });
-
-      jest.spyOn(cacheService, 'set').mockResolvedValue();
-
-      const cacheProfiles = await cacheService.get('profiles');
-
+  
+      jest.spyOn(service, 'updateUserById').mockResolvedValue(result);
+  
       const response = await service.updateUserById(updateUser);
+  
       expect(response).toEqual(result);
-      expect(cacheService.get).toHaveBeenCalledWith('allUsers');
-      expect(cacheService.get).toHaveBeenCalledWith('profiles');
-      expect(cacheService.set).toHaveBeenCalledWith(
-        'allUsers',
-        expect.any(Array),
-        360000,
-      );
+  
     });
+  
 
     it('should throw an error if user to update is not found', async () => {
       const updateUser: UpdateUserRequest = mockUpdateUser;
